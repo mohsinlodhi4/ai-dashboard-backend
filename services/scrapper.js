@@ -104,11 +104,6 @@ async function getOtherUrls(page, baseUrl) {
     return otherUrls;
   }
   
-// Example usage
-const websiteUrl = 'https://vercel.com/';
-// scrapeWebsite(websiteUrl);
-    scrapeWebsiteAndExtractData(websiteUrl).then(data=> console.log(data))
-
 // helpers regex functions
 function extractEmailsFromString(inputString) {
     // Regular expression for matching email addresses
@@ -162,6 +157,10 @@ function extractEmailsFromString(inputString) {
     return addresses;
   }
 // helpers end
+
+// Example usage
+// const websiteUrl = 'https://vercel.com/';
+// scrapeWebsiteAndExtractData(websiteUrl).then(data=> console.log(data))
 
 module.exports = {
     scrapeWebsiteAndExtractData
