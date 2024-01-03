@@ -58,7 +58,7 @@ async function submitCompanyDetails(req, res){
             }, 
             {upsert: true}
         )
-        return res.json(successResponse("Profile Details saved successfully", scrapedData));
+        return res.json(successResponse("Profile Details saved successfully"));
 
     }catch(e) {
         console.log("submitCompanyDetails Error:",e)
