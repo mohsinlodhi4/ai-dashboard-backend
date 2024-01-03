@@ -15,10 +15,12 @@ async function submitWebUrlAndScrapeData(req, res) {
     const {webUrl} = req.body;
     await CompanyProfile.updateOne(
         {
-            webUrl: webUrl,
+            userId: userId
         }, 
         {
-            userId: userId
+            $set: {
+                webUrl: webUrl,
+            }
         }, 
         {upsert: true}
     )
@@ -47,10 +49,12 @@ async function submitCompanyDetails(req, res){
 
         await CompanyProfile.updateOne(
             {
-                ...data,
+                userId: userId
             }, 
             {
-                userId: userId
+                $set: {
+                    ...data,
+                }
             }, 
             {upsert: true}
         )

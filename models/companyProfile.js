@@ -5,10 +5,19 @@ const CompanyProfile = new mongoose.Schema({
         type: String,
         required: true,
     },
+    businessTitle: {
+        type: String,
+    },
+    businessDescription: {
+        type: String,
+    },
     contactDetails: {
         type: Object,
     },
     services: {
+        type: Array
+    },
+    socialLinks: {
         type: Array
     },
     targetCustomers: {

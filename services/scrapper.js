@@ -7,6 +7,7 @@ async function scrapeWebsiteAndExtractData(url) {
   // Extract data from the main page
   const mainPageData = await scrapeWebsite(page, url);
   const businessTitle = mainPageData ? mainPageData.title : "";
+  const businessDescription = mainPageData ? mainPageData.description : "";
   const {emails,contactNumbers, socialLinks, addresses} = extractDataFromPage(mainPageData.content)
 
   // Check other URLs found on the main page
@@ -37,6 +38,7 @@ async function scrapeWebsiteAndExtractData(url) {
 
   return {
     businessTitle,
+    businessDescription,
     emails,
     contactNumbers,
     socialLinks,
@@ -49,10 +51,18 @@ async function scrapeWebsite(page, url) {
   
       // Execute JavaScript in the context of the page to get the rendered content
       const scrapedData = await page.evaluate(() => {
+        const ogDescriptionTag = document.querySelector('meta[property="og:description"]');
+        let ogDescription = ogDescriptionTag ? ogDescriptionTag.getAttribute('content') : null;
+        if(!ogDescription) {
+          const descriptionTag = document.querySelector('meta[name="description"]');
+          ogDescription = descriptionTag ? descriptionTag.getAttribute('content') : null;
+        }
+
         // Customize this based on the structure of the React app
         // For example, you might use document.querySelector or other methods to find the desired elements
         const data = {
           title: document.title,
+          description: ogDescription,
           content: document.body.innerHTML,
         };
   
@@ -141,19 +151,19 @@ function extractEmailsFromString(inputString) {
   function extractAddressesFromString(inputString) {
     // Regular expression for a basic address pattern
     var addressRegex = /\b\d{1,5}\s+[\w\s]+,\s*[\w\s]+,\s*[\w\s]+(?:,\s*\d{5})?\b/g;
-    var addressRegex2 = /\b[A-Z][A-Za-z\s]+,\s*[A-Z][A-Za-z\s]+(?:,\s*\d{5})?\b/g;
+    // var addressRegex2 = /\b[A-Z][A-Za-z\s]+,\s*[A-Z][A-Za-z\s]+(?:,\s*\d{5})?\b/g;
 
   
     // Use the match() method to find all potential addresses in the input string
     const output1 = inputString.match(addressRegex);
-    const output2 = inputString.match(addressRegex2);
+    // const output2 = inputString.match(addressRegex2);
     var addresses = [];
     if(output1) {
         addresses.push(...output1)
     }
-    if(output2) {
-        addresses.push(...output2)
-    }
+    // if(output2) {
+    //     addresses.push(...output2)
+    // }
     return addresses;
   }
 // helpers end
