@@ -127,8 +127,9 @@ function extractEmailsFromString(inputString) {
 
   function extractSocialLinksFromString(inputString) {
     // Regular expression for matching common social media links
-    var socialLinksRegex = /(?:https?:\/\/)?(?:www\.)?(?:facebook\.com|twitter\.com|linkedin\.com|instagram\.com)\/\S+/gi;
-  
+    // var socialLinksRegex = /(?:https?:\/\/)?(?:www\.)?(?:facebook\.com|twitter\.com|linkedin\.com|instagram\.com)\/\S+/gi;
+    const socialLinksRegex = /(https?:\/\/(?:www\.)?(twitter|facebook|instagram|linkedin)\.com\/[a-zA-Z0-9_]+)/gi;
+
     // Use the match() method to find all social media links in the input string
     var socialLinks = inputString.match(socialLinksRegex);
   
