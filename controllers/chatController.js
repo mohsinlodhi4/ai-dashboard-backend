@@ -5,11 +5,9 @@ const moment = require('moment');
 const mongoose = require('mongoose');
 const CustomError = require('../exceptions/customError.js')
 const ChatSession = require('../models/chatSession.js')
-const OpenAI  = require("openai")
+const { openai } = require("../utils/constants.js")
+/* This file is not being used, chatBotController.js is latest file */
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
-})
 
 const sendMessage = async (req, res) =>{
     try{
