@@ -7,6 +7,7 @@ const User = new mongoose.Schema({
     textPassword: {type: String},
     status: {type: String, default: 'active'},
     phone: { type: String },
+    profileCompleted: { type: Boolean, default: false },
     role: { type: mongoose.Schema.Types.ObjectId, ref: 'Role', required:true },
 
 },{

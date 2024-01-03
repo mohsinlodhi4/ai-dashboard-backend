@@ -17,5 +17,7 @@ ProfileController.submitWebUrlAndScrapeData )
 // step 2, 3
 router.post('/save', ProfileController.submitCompanyDetails)
 
+// after completing profile
+router.post('/mark-as-complete', ProfileController.markProfileAsComplete)
 
 module.exports = router;

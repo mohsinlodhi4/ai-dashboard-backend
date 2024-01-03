@@ -66,6 +66,25 @@ async function submitCompanyDetails(req, res){
     }
 }
 
+async function markProfileAsComplete(req, res){
+    const userId = req.user_id;
+    if( !(await CompanyProfile.findOne({userId})) ) {
+        return res.status(400).json(errorResponse("Profile not found"))
+    }
+
+    await User.updateOne(
+        {
+            _id: userId
+        }, 
+        {
+            $set: {
+                profileCompleted: true,
+            }
+        }
+    );
+    return res.json(successResponse("Profile marked as complete."))
+}
+
 async function getCompanyProfile(req, res){
     const userId = req.user_id;
     const companyProfile = await CompanyProfile.findOne({userId})
@@ -78,5 +97,6 @@ async function getCompanyProfile(req, res){
 module.exports = {
     submitWebUrlAndScrapeData,
     submitCompanyDetails,
+    markProfileAsComplete,
     getCompanyProfile,
 }
