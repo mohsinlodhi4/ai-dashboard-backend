@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const ProfileController = require('../controllers/profileController');
 const {body, param} = require('express-validator');
-const validationResultMiddleware = require('../middlewares/validationResultMiddleware');  
+const validationResultMiddleware = require('../middlewares/validationResultMiddleware');
+const imageUpload = require('../middlewares/imageUpload');
 
 /** uses auth middleware **/
 
@@ -15,7 +16,7 @@ validationResultMiddleware,
 ProfileController.submitWebUrlAndScrapeData )
 
 // step 2, 3
-router.post('/save', ProfileController.submitCompanyDetails)
+router.post('/save', imageUpload.single('logo'), ProfileController.submitCompanyDetails)
 
 // after completing profile
 router.post('/mark-as-complete', ProfileController.markProfileAsComplete)

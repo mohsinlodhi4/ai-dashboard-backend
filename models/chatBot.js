@@ -2,13 +2,26 @@ const mongoose = require('mongoose');
 
 const ChatBot = new mongoose.Schema({
 
-    templateId: { type: mongoose.Schema.Types.ObjectId, ref: 'ChatBotTemplate', required:true },
+    template: {
+        // step 1
+        name: { type: String, required: true},
+        description: { type: String},
+        roleDetailedDescription: { type: String},
+        introMessage: { type: String},
+        trainingDialogues: { type: Array},
+        visibility: { type: String, enum: ['public', 'private', 'unlisted'], default: 'public'},
+        clonable: { type: Boolean, default: false},
+        // step2
+        image: { type: String},
+        imagePath: { type: String},
+        placeHolderText: { type: String},
+    
+    },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required:true },
-
-    visibility: { type: String, enum: ['public', 'private', 'unlisted'], default: 'public'},
-    clonable: { type: Boolean, default: false},
+    
+    status: {type: String, enum: ['published', 'draft'], default: 'draft'},
     totalRuns: {type: Number, default: 0},
-    runs: {type: Array}, // [{ date: "", tokens: "", userId: ""}]
+    runsDetail: {type: Array}, // [{ date: "", tokens: "", userId: ""}]
 
 },{
     timestamps: true,
