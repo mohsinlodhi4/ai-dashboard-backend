@@ -14,7 +14,8 @@ const ChatBot = new mongoose.Schema({
         // step2
         image: { type: String},
         imagePath: { type: String},
-        placeHolderText: { type: String},
+        selectedImage: {type: String, default: 'bot1'}, // userUploaded, bot1, bot2, ...
+        placeHolderText: { type: String, default: 'What would you like to talk about?'},
     
     },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required:true },

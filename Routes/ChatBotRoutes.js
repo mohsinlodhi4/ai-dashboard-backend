@@ -6,20 +6,19 @@ const imageUpload = require('../middlewares/imageUpload');
 const authMiddleware = require('../middlewares/auth');
 /** uses auth middleware **/
 
-router.get('/list', authMiddleware, ProfileController.getCompanyProfile);
+router.get('/list', authMiddleware, ChatBotController.getChatbots);
 
 
 router.post('/save', 
-authMiddleware,
-body('name').notEmpty().withMessage("Name field is required"), 
-validationResultMiddleware,
-imageUpload.single('image'),
-ChatBotController.createOrUpdateChatBot )
+    authMiddleware,
+    imageUpload.single('image'),
+    body('name').notEmpty().withMessage("Name field is required"), 
+    validationResultMiddleware,
+    ChatBotController.createOrUpdateChatBot )
 
 
-// after completing profile
-router.post('/mark-as-complete', ProfileController.markProfileAsComplete)
-router.get('/:id', authMiddleware, ProfileController.getCompanyProfile);
-router.get('/:id', authMiddleware, ProfileController.getCompanyProfile);
+router.delete('/delete/:id', authMiddleware, ChatBotController.deleteChatBot)
+
+router.get('/:id', ChatBotController.getChatBotDetails);
 
 module.exports = router;
