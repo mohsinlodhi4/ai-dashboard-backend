@@ -5,6 +5,7 @@ const moment = require('moment');
 const mongoose = require('mongoose');
 const CustomError = require('../exceptions/customError.js')
 const ChatBot = require('../models/chatBot.js')
+const User = require('../models/user.js')
 const {openai} = require("../utils/constants.js")
 const jwt = require('jsonwebtoken');
 
@@ -42,7 +43,8 @@ async function deleteChatBot(req, res){
         const chatBotId = req.params.id;
         const userId = req.user_id;
 
-        await ChatBot.deleteOne({_id: chatBotId, userId});
+        // await ChatBot.deleteOne({_id: chatBotId, userId});
+        await ChatBot.updateOne({_id: chatBotId, userId}, {$set: {deletedAt: (new Date()).toISOString() }});
         res.json(successResponse('ChatBot deleted successfully'));
     } catch (error) {
         console.error(error);
@@ -56,7 +58,7 @@ async function getChatBotDetails(req, res){
         if(!mongoose.Types.ObjectId.isValid(chatBotId)) {
             return res.status(400).json(errorResponse( 'Invalid chatbot id'));
         }
-        const chatBot = await ChatBot.findOne({_id: chatBotId})
+        const chatBot = await ChatBot.findOne({_id: chatBotId, deletedAt: null }).lean()
         const userId = getUserIdFromToken(req);
         
         if (!chatBot) {
@@ -65,6 +67,7 @@ async function getChatBotDetails(req, res){
         if(chatBot.template.visibility != 'public' && chatBot.userId.toString() != userId) {
             return res.status(403).json(errorResponse("Chatbot is not publically accessible."));
         }
+        chatBot.user = await User.findOne({_id: chatBot.userId}, '_id name email')
 
         res.json(successResponse('Chatbot details fetched successfully.', chatBot));
     } catch (error) {
@@ -82,7 +85,7 @@ async function getChatbots(req, res){
         const totalCount = await ChatBot.countDocuments();
         const totalPages = Math.ceil(totalCount / limit);
 
-        const chatBots = await ChatBot.find({userId})
+        const chatBots = await ChatBot.find({userId, deletedAt: null})
             .sort({ createdAt: -1 }) // Assuming you have a createdAt field for the timestamp
             .skip((page - 1) * limit)
             .limit(limit)

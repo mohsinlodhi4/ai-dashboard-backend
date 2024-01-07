@@ -23,6 +23,7 @@ const ChatBot = new mongoose.Schema({
     status: {type: String, enum: ['published', 'draft'], default: 'draft'},
     totalRuns: {type: Number, default: 0},
     runsDetail: {type: Array}, // [{ date: "", tokens: "", userId: ""}]
+    deletedAt: {type: Date, default: null},
 
 },{
     timestamps: true,
